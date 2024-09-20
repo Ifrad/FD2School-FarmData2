@@ -6,6 +6,20 @@
     <!-- Level 1 Headings -->
     <h1>Harvest Report</h1>
     <div>
+    <label for="start-date">Start:</label>
+     <input type="date" id="start-date" name="start-date"
+         min="2014-01-01" max="2022-01-01"
+         value="2020-05-05">
+    </div>
+
+    <div>
+    <label for="end-date">End:</label>
+      <input type="date" id="end-date" name="end-date"
+         min="2020-05-05" max="2022-01-01"
+         value="2020-05-15">
+    </div>
+
+    <div>
       <label for="crop">Crop:</label>
     <select id="crop" name="crop">
       <option value="broccoli">Broccoli</option>
@@ -13,6 +27,15 @@
       <option value="peas">Peas</option>
     </select>
    </div>
+   <div>
+  <label for="area">Area:</label>
+  <select id="area" name="area">
+    <option value="all" selected>All</option>
+    <option value="chuau-1">Chuau-1</option>
+    <option value="sq7">SQ7</option>
+  </select>
+  </div>
+
 
     <hr>
     <p> This page is a<i> mockup</i> of a simplified harvest report</p>
