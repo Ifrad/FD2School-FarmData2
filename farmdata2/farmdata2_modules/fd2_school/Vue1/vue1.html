@@ -26,18 +26,14 @@
       <div>
         <label for="crop">Crop:</label>
         <select v-model="reportCrop">
-          <option value="broccoli">Broccoli</option>
-          <option value="kale">Kale</option>
-          <option value="peas">Peas</option>
+          <option v-for="crop in crops" :key="crop" :value="crop">{{ crop }}</option>
         </select>
       </div>
 
       <div>
         <label for="area">Area:</label>
         <select v-model="reportArea">
-          <option value="all">All</option>
-          <option value="chuau-1">Chuau-1</option>
-          <option value="sq7">SQ7</option>
+          <option v-for="area in areas" :key="area" :value="area">{{ area }}</option>
         </select>
       </div>
 
@@ -77,6 +73,15 @@
           </tr>
         </tbody>
       </table>
+
+      <!-- Names List -->
+      <div>
+        <h2>Names List</h2>
+        <ul>
+          <li v-for="name in names" :key="name">{{ name }}</li>
+        </ul>
+      </div>
+
     </div>
 
     <script src="https://unpkg.com/vue@2"></script>
@@ -89,15 +94,17 @@
           reportTitle: "My Sample Harvest Report", // Default title
           reportStartDate: '2020-05-05', // Default start date
           reportEndDate: '2020-05-15', // Default end date
-          reportCrop: 'Kale', // Default crop
-          reportArea: 'all' // Default area
-        },
-        
-
+          reportCrop: '', // Default crop
+          reportArea: '', // Default area
+          names: ["Joe", "Arun", "Ouwen", "Anh", "Sue"], // Names array 
+          crops: ["Broccoli", "Kale", "Peas"], // Crop options as an array
+          areas: ["All", "Chuau-1", "SQ7"] // Area options as an array
+        }
       });
     </script>
+    
   </body>
 </html>
-    
+  
     
   
