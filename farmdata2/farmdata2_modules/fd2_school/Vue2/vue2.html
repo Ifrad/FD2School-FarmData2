@@ -112,14 +112,23 @@
           newField:""
         },
         methods: {
-          addName() {
+          addName: function() {
             const trimmedName = this.newField.trim(); // Trim the input value
             if (trimmedName) { // Check if it's not empty after trimming
               this.names.push(trimmedName); // Add name to the list
               this.newField = ''; // Clear the input field after adding
             }
           }
-        }
+        },
+          generateReport: function() {
+            this.harvestLogs.push({
+              date: "2018-05-01",
+              area: "Orion-3",
+              crop: "Kale",
+              yield: 10,
+              units: "Bunches"
+    });
+  }
       });
         
       
