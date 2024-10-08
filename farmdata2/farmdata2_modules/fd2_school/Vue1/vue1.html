@@ -74,7 +74,13 @@
           <li v-for="c in cards" :key="c.suit + c.rank">{{ c.rank }} of {{ c.suit }}</li>
         </ul>
       </div>
+       <div>
+       <label for="new-field">Name:</label>
+       <input type="text" v-model="newField" @keyup.enter="addName" placeholder="">
+       <button @click="addName">Add Name</button>
+      </div>
     </div>
+    
 
     <script src="https://unpkg.com/vue@2"></script>
     
@@ -82,13 +88,14 @@
     <script>
       var app = new Vue({
         el: "#vue-app",
+        
         data: {
           reportTitle: "My Sample Harvest Report", // Default title
           reportStartDate: '2020-05-05', // Default start date
           reportEndDate: '2020-05-15', // Default end date
           reportCrop: '', // Default crop
           reportArea: '', // Default area
-          names: ["Joe", "Arun", "Ouwen", "Anh", "Sue"], // Names array
+          names: ["Joe", "Arun", "Ouwen", "Anh", "Sue","Ifrad"], // Names array
           crops: ["Broccoli", "Kale", "Peas"], // Crop options as an array
           areas: ["All", "Chuau-1", "SQ7"], // Area options as an array
           cards: [ // Cards array
@@ -100,10 +107,21 @@
           harvestLogs: [
             { date: "2018-05-02", area: "Chuau-1", crop: "Kale", yield: 10, units: "Bunches" },
             { date: "2018-05-05", area: "SQ7", crop: "Broccoli", yield: 15, units: "Pounds" }
-          ]
+          ],
+          newField:""
+        },
+        methods: {
+          addName() {
+            const trimmedName = this.newField.trim(); // Trim the input value
+            if (trimmedName) { // Check if it's not empty after trimming
+              this.names.push(trimmedName); // Add name to the list
+              this.newField = ''; // Clear the input field after adding
+            }
+          }
         }
-        
       });
+        
+      
       Vue.config.devtools = true;
     </script>
   </body>
