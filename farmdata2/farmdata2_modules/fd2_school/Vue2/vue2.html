@@ -12,13 +12,15 @@
       <!-- Start Date input and binding -->
       <div>
         <label for="start-date">Start:</label>
-        <input type="date" v-model="reportStartDate" min="2014-01-01" max="2022-01-01">
+        <input type="date" v-model="reportStartDate" 
+        :max = "reportEndDate" min="2014-01-01" max="2022-01-01">
       </div>
 
       <!-- End Date input and binding -->
       <div>
         <label for="end-date">End:</label>
-        <input type="date" v-model="reportEndDate" min="2020-05-05" max="2022-01-01">
+        <input type="date" v-model="reportEndDate" 
+        :min="reportStartDate" min="2020-05-05" max="2022-01-01">
       </div>
 
       <!-- Crop selection input and binding -->
@@ -90,7 +92,7 @@
       <div>
         <label for="new-field">Name:</label>
         <input type="text" v-model="newField" @keyup.enter="addName" placeholder="">
-        <button @click="addName">Add Name</button>
+        <button @click="addName" :disabled="!newField.trim()">Add Name</button>
       </div>
       <div>
         <button @click='harvestLogs.push({date:"2018-05-01", area:"Orion-3", crop:"Kale", yield:10, units:"Bunches"})'>Generate Report</button>
