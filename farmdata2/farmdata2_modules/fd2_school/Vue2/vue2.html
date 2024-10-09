@@ -50,7 +50,8 @@
         </thead>
         <tbody>
           <!-- v-for to dynamically generate table rows -->
-          <tr v-for="log in harvestLogs" :key="log.date + log.area + log.crop">
+          <tr v-for="(log, index) in harvestLogs" :key="log.date + log.area + log.crop">
+            <td>{{index+1}}</td>
             <td>{{ log.date }}</td>
             <td>{{ log.area }}</td>
             <td>{{ log.crop }} {{ log.yield }}</td>
@@ -64,7 +65,7 @@
       <div>
         <h2>Names List</h2>
         <ul>
-          <li v-for="name in names" :key="name">{{ name }}</li>
+          <li v-for="(name, index) in names" :key="name">{{ name + "(" + index + ")" }}</li>
         </ul>
       </div>
 
