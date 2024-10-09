@@ -39,6 +39,7 @@
 
       <!-- Harvest Logs Table -->
       <h3>Harvest Logs</h3>
+      <div v-if="harvestLogs.length > 0">
       <table border="1">
         <thead>
           <tr>
@@ -59,12 +60,16 @@
           </tr>
         </tbody>
       </table>
-      
+      </div>
+      <div v-else>
+        No matching records found.
+      </div>
 
       <!-- Names List -->
       <div>
         <h2>Names List</h2>
         <ul>
+          <li v-if="names.length===0">No names yet!</li>
           <li v-for="(name, index) in names" :key="name">{{ name + "(" + index + ")" }}</li>
         </ul>
       </div>
@@ -72,17 +77,23 @@
       <!-- Cards List -->
       <div>
         <h3>Cards List</h3>
-        <ul>
-          <li v-for="c in cards" :key="c.suit + c.rank">{{ c.rank }} of {{ c.suit }}</li>
-        </ul>
+        <button v-if="!showCards" @click="showCards = true">Show Cards</button> <!-- Button to show cards -->
+        <button v-else @click="showCards = false">Hide Cards</button> <!-- Button to hide cards -->
+        
+        <div v-if="showCards"> <!-- Cards list -->
+          <ul>
+            <li v-for="c in cards" :key="c.suit + c.rank">{{ c.rank }} of {{ c.suit }}</li>
+          </ul>
+        </div>
       </div>
-       <div>
-       <label for="new-field">Name:</label>
-       <input type="text" v-model="newField" @keyup.enter="addName" placeholder="">
-       <button @click="addName">Add Name</button>
+
+      <div>
+        <label for="new-field">Name:</label>
+        <input type="text" v-model="newField" @keyup.enter="addName" placeholder="">
+        <button @click="addName">Add Name</button>
       </div>
       <div>
-        <button  @click='harvestLogs.push({date:"2018-05-01", area:"Orion-3", crop:"Kale", yield:10, units:"Bunches"})'>Generate Report</button>
+        <button @click='harvestLogs.push({date:"2018-05-01", area:"Orion-3", crop:"Kale", yield:10, units:"Bunches"})'>Generate Report</button>
       </div>
     </div>
     
@@ -100,7 +111,7 @@
           reportEndDate: '2020-05-15', // Default end date
           reportCrop: '', // Default crop
           reportArea: '', // Default area
-          names: ["Joe", "Arun", "Ouwen", "Anh", "Sue","Ifrad"], // Names array
+          names: [], // Names array
           crops: ["Broccoli", "Kale", "Peas"], // Crop options as an array
           areas: ["All", "Chuau-1", "SQ7"], // Area options as an array
           cards: [ // Cards array
@@ -109,8 +120,9 @@
             { suit: "D", rank: "7" }
           ],
           // Harvest logs array
-          harvestLogs: [ ],
-          newField:""
+          harvestLogs: [],
+          newField: "",
+          showCards: false // New variable to track visibility of cards list
         },
         methods: {
           addName: function() {
@@ -119,8 +131,7 @@
               this.names.push(trimmedName); // Add name to the list
               this.newField = ''; // Clear the input field after adding
             }
-          }
-        },
+          },
           generateReport: function() {
             this.harvestLogs.push({
               date: "2018-05-01",
@@ -128,8 +139,9 @@
               crop: "Kale",
               yield: 10,
               units: "Bunches"
-    });
-  }
+            });
+          }
+        }
       });
         
       
