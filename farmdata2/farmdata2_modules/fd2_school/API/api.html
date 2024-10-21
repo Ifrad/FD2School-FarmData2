@@ -9,6 +9,7 @@
       </div>
       <h1>{{ reportTitle.trim() === '' ? 'Mock Harvest Report' : reportTitle}}</h1>
       <div>
+        <h3>Report Details</h3>
         <p>Farm: {{farm}}</p>
         <p>User:{{user}}</p>
         <p>Language:{{language}}</p>
@@ -46,6 +47,7 @@
 
       <!-- Harvest Logs Table -->
       <h3>Harvest Logs</h3>
+
       <div v-if="harvestLogs.length > 0">
       <table border="1">
         <thead>
@@ -150,6 +152,9 @@
               yield: 10,
               units: "Bunches"
             });
+            this.farm = "Sample Farm";
+            this.user="manager1";
+            this.language="English";
           }
         }
       });
