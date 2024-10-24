@@ -46,23 +46,25 @@
       <!-- Harvest Logs Table -->
       <h3>Harvest Logs</h3>
 
-      <div v-if="harvestLogs.length > 0">
+      <div v-if="harvestLogs&&harvestLogs.length > 0">
         <table border="1">
           <thead>
             <tr>
               <th>Date</th>
               <th>Area</th>
-              <th>Crop/Yield</th>
+              <th>Crop</th>
+              <th> Yield</th>
               <th>Units</th>
             </tr>
           </thead>
           <tbody>
             <!-- v-for to dynamically generate table rows -->
-            <tr v-for="(log, index) in harvestLogs" :key="log.date + log.area + log.crop">
-              <td>{{ index + 1 }}</td>
+            <tr v-for="(log, index) in harvestReportRows" :key="index">
+              
               <td>{{ log.date }}</td>
               <td>{{ log.area }}</td>
-              <td>{{ log.crop }} {{ log.yield }}</td>
+              <td>{{ log.crop }}</td>
+              <td>{{ log.yield }}</td>
               <td>{{ log.units }}</td>
             </tr>
           </tbody>
@@ -125,16 +127,18 @@
             { suit: "D", rank: "7" }
           ],
           harvestLogs: [],
+          harvestLogResults: [],
           newField: "",
           showCards: false,
           farm: "",
           user: "",
           language: "",
-          idToCropMap: null  // Added to store the crop map
+          idToCropMap: new Map()  // Added to store the crop map
+          
         },
         created(){
           console.log("HarvestReport Vue instance created!");
-          getCropToIDMap()
+          getIDToCropMap()
             .then((theMap) => {
               this.idToCropMap = theMap;
               console.log("crop map loaded:", this.idToCropMap);
@@ -146,8 +150,28 @@
         computed: {
           cropNames() {
             return this.idToCropMap ? Array.from(this.idToCropMap.keys()) : [];
+          },
+          harvestReportRows(){
+            let tableRows=[];
+            for(let log of this.harvestLogs){
+                let tableRow={
+                    date:dayjs.unix(log.timestamp).format('YYYY-MM-DD'),
+                    area: log.area[0].name,
+                    crop:this.idToCropMap.get(log.data.crop_tid),
+                    yield: log.quantity[0].value,
+                    units:log.quantity[0].unit.name,
+
+                };
+                tableRows.push(tableRow);
+            }
+            return tableRows;
           }
+          
         },
+          
+         
+        
+
         methods: {
           addName: function() {
             const trimmedName = this.newField.trim();
@@ -158,20 +182,44 @@
           },
           generateReport: function() {
             axios.get('/farm.json')
-              .then((response) => {
-                this.harvestLogs = response.data.logs || [];
-                this.farm = response.data.name;
-                this.user = response.data.user.name;
-                this.language = response.data.user.language;
-              })
-              .catch((error) => {
-                console.log("Error Occurred");
-                console.log(error);
-              });
-          }
-        }
-      });
-        
+                .then((response) => {
+                    // Set farm details from the response data
+                    this.reportFarm = response.data.name;
+                    this.reportUser = response.data.user.name;
+                    this.reportLanguage = response.data.user.language;
+                    this.harvestLogs = response.data.harvestLogs;  // Update this with the correct key from the API response
+                })
+                .catch((err) => {
+                    console.error('Error fetching farm data:', err);
+                });
+            let startTimestamp = dayjs(this.reportStartDate).unix();
+            let endTimestamp = dayjs(this.reportEndDate).unix();
+            console.log("Start TimeStamp: ",startTimestamp);
+            console.log("End Timestamp",endTimestamp);
+
+            let requestString = `/log.json?type=farm_harvest&timestamp[ge]=${startTimestamp}&timestamp[le]=${endTimestamp}`;
+
+    // Log the request string
+            console.log('Request String:', requestString);
+            this.harvestLogResults=[];
+         
+            getAllPages(requestString, this.harvestLogResults)
+            .then(() => {
+            // Log retrieved harvest logs
+                console.log("All harvest logs retrieved:", this.harvestLogResults);
+                this.harvestLogs=this.harvestLogResults;
+            
+          })
+            .catch((err) => {
+                console.log("Error occurred during the request:", err);
+          });
+      }
+    }
+});
+
+
+
+       
       Vue.config.devtools = true;
     </script>
   </body>
