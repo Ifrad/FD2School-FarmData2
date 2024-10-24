@@ -149,7 +149,7 @@
         },
         computed: {
           cropNames() {
-            return this.idToCropMap ? Array.from(this.idToCropMap.keys()) : [];
+            return this.idToCropMap ? Array.from(this.idToCropMap.values()) : [];
           },
           harvestReportRows(){
             let tableRows=[];
@@ -162,7 +162,12 @@
                     units:log.quantity[0].unit.name,
 
                 };
-                tableRows.push(tableRow);
+                if (this.reportCrop==="All" || tableRow.crop===this.reportCrop){
+                    tableRows.push(tableRow);
+                }
+                
+
+                
             }
             return tableRows;
           }
